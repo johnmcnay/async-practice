@@ -26,37 +26,30 @@ namespace async_practice_thing.Controllers
             return View();
         }
 
-        public async Task<int> RandomNumber()
-        {
 
+        private async Task<string> CallEndpoint(string url)
+        {
             HttpClient client = new HttpClient();
-            var response = await client.GetAsync("https://seriouslyfundata.azurewebsites.net/api/generatearandomnumber");
+            var response = await client.GetAsync(url);
 
             var responseString = await response.Content.ReadAsStringAsync();
 
-            return Convert.ToInt32(responseString);
+            return responseString;
+        }
+
+        public async Task<int> RandomNumber()
+        {
+            return Convert.ToInt32(await CallEndpoint("https://seriouslyfundata.azurewebsites.net/api/generatearandomnumber"));
         }
 
         public async Task<string> ChuckNorris()
         {
-            HttpClient client = new HttpClient();
-            var response = await client.GetAsync("https://seriouslyfundata.azurewebsites.net/api/chucknorrisfact");
-
-            var responseString = await response.Content.ReadAsStringAsync();
-
-            return responseString;
-
+            return await CallEndpoint("https://seriouslyfundata.azurewebsites.net/api/chucknorrisfact");
         }
 
         public async Task<string> Seleucids()
         {
-            HttpClient client = new HttpClient();
-            var response = await client.GetAsync("https://seriouslyfundata.azurewebsites.net/api/seleucids");
-
-            var responseString = await response.Content.ReadAsStringAsync();
-
-            return responseString;
-
+            return await CallEndpoint("https://seriouslyfundata.azurewebsites.net/api/seleucids");
         }
 
 
