@@ -37,9 +37,14 @@ namespace async_practice_thing.Controllers
             return responseString;
         }
 
-        public async Task<int> RandomNumber()
+        public async Task<IActionResult> RandomNumber()
         {
-            return Convert.ToInt32(await CallEndpoint("https://seriouslyfundata.azurewebsites.net/api/generatearandomnumber"));
+            string randomNumber = await CallEndpoint("https://seriouslyfundata.azurewebsites.net/api/generatearandomnumber");
+
+
+            ViewData["randomNumber"] = randomNumber;
+
+            return View();
         }
 
         public async Task<string> ChuckNorris()
