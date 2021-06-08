@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using async_practice_thing.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace async_practice_thing.Controllers
 {
@@ -82,9 +85,15 @@ namespace async_practice_thing.Controllers
             return View();
         }
 
-        public async Task<string> ChuckNorris()
+        public async Task<IActionResult> ChuckNorris()
         {
-            return await CallEndpoint("https://seriouslyfundata.azurewebsites.net/api/chucknorrisfact");
+            string factStr = await CallEndpoint("https://seriouslyfundata.azurewebsites.net/api/chucknorrisfact");
+
+            ChuckNorrisFact account = JsonConvert.DeserializeObject<ChuckNorrisFact>(factStr);
+
+            ViewData["fact"] = account.Joke;
+
+            return View();
         }
 
         public async Task<string> Seleucids()
@@ -103,6 +112,16 @@ namespace async_practice_thing.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+    }
+
+    public class Seleucids
+    {
+
+    }
+
+    public class ChuckNorrisFact
+    {
+        public string Joke { get; set; }
     }
 
     public class Teacher
